@@ -1,5 +1,4 @@
 public enum Paragrafhs {
-
     LAPTOPS_COMPUTERS_MONITORS("Ноутбуки, компьютеры, мониторы"),
     COMPONENTS("Комплектующие"),
     DATA_STORAGE("Хранение данных"),
