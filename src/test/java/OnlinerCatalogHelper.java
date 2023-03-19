@@ -7,10 +7,10 @@ import java.util.List;
 
 import static org.openqa.selenium.By.xpath;
 
-public class CatalogHelper {
+public class OnlinerCatalogHelper {
     private WebDriver driver;
 
-    public CatalogHelper(WebDriver driver) {
+    public OnlinerCatalogHelper(WebDriver driver) {
         this.driver = driver;
     }
 
@@ -22,7 +22,18 @@ public class CatalogHelper {
         return items.subList(1, 10);
     }
 
-    public void chooseItemFromCatalog (int id) {
-        driver.findElement(By.xpath("//li[@data-id='"+id+"']")).click();
+    public void chooseItemFromCatalog(int itemId) {
+        driver.findElement(By.xpath("//li[@data-id='" + itemId + "']")).click();
+    }
+
+    public List<String> getItemsFromComputersParagrafh() {
+        List<String> ItemsFromComputersParagrafh = new ArrayList<>();
+        driver.findElements(xpath("(//div[@class='catalog-navigation-list__aside-list'])[3]/div"))
+                .forEach((WebElement item) -> ItemsFromComputersParagrafh.add(item.getText()));
+        return ItemsFromComputersParagrafh;
+    }
+
+    public void findAccessoriesParagrafh(String paragrafhName) {
+        driver.findElement(By.xpath("//div[text()=' " + paragrafhName + " ']/..")).click();
     }
 }

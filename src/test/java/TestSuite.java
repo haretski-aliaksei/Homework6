@@ -1,7 +1,7 @@
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.ArrayList;
@@ -15,24 +15,70 @@ public class TestSuite {
         System.setProperty("webdriver.chrome.driver", "C:\\Program Files\\drivers\\chromedriver_win32\\chromedriver.exe");
 
         List<String> listOfSections = new ArrayList<>();
-        listOfSections.add(Section.ELECTRONICS.getNameSection());
-        listOfSections.add(Section.COMPUTERS_AND_NETWORKS.getNameSection());
-        listOfSections.add(Section.APPLIANCES.getNameSection());
-        listOfSections.add(Section.CONSTRUCTION_AND_REPAIR.getNameSection());
-        listOfSections.add(Section.HOUSE_AND_GARDEN.getNameSection());
-        listOfSections.add(Section.AUTO_AND_MOTO.getNameSection());
-        listOfSections.add(Section.BEAUTY_AND_SPORTS.getNameSection());
-        listOfSections.add(Section.FOR_CHILDREN_AND_MOTHERS.getNameSection());
-        listOfSections.add(Section.WORK_AND_OFFICE.getNameSection());
-        listOfSections.add(Section.FOOD.getNameSection());
+        listOfSections.add(Sections.ELECTRONICS.getName());
+        listOfSections.add(Sections.COMPUTERS_AND_NETWORKS.getName());
+        listOfSections.add(Sections.APPLIANCES.getName());
+        listOfSections.add(Sections.ON_EVERY_DAY.getName());
+        listOfSections.add(Sections.CONSTRUCTION_AND_REPAIR.getName());
+        listOfSections.add(Sections.HOUSE_AND_GARDEN.getName());
+        listOfSections.add(Sections.AUTO_AND_MOTO.getName());
+        listOfSections.add(Sections.BEAUTY_AND_SPORTS.getName());
+        listOfSections.add(Sections.FOR_CHILDREN_AND_MOTHERS.getName());
 
         WebDriver driver = new ChromeDriver();
         driver.get(ONLINER_START_PAGE);
-        driver.findElement(By.xpath("//a[contains(@href, 'catalog') and contains(text(), 'Каталог')]"))
-                .click();
+        driver.findElement(XpathStorage.CATALOG).click();
 
-        CatalogHelper catalogHelper = new CatalogHelper(driver);
+        OnlinerCatalogHelper catalogHelper = new OnlinerCatalogHelper(driver);
 
-        Assertions.assertThat(catalogHelper.getCatalogItems().containsAll(listOfSections)).isTrue();
+        Assertions.assertThat(catalogHelper.getListOfCatalogItems().containsAll(listOfSections)).isTrue();
+
+        driver.close();
+    }
+
+    @Test
+    public void checkComputerAndNetworksSection() {
+        int indexNumber = 2;
+
+        System.setProperty("webdriver.chrome.driver", "C:\\Program Files\\drivers\\chromedriver_win32\\chromedriver.exe");
+
+        List<String> listOfParagrafhs = new ArrayList<>();
+        listOfParagrafhs.add(Paragrafhs.LAPTOPS_COMPUTERS_MONITORS.getName());
+        listOfParagrafhs.add(Paragrafhs.COMPONENTS.getName());
+        listOfParagrafhs.add(Paragrafhs.DATA_STORAGE.getName());
+        listOfParagrafhs.add(Paragrafhs.NETWORK_HARDWARE.getName());
+
+        WebDriver driver = new ChromeDriver();
+        driver.get(ONLINER_START_PAGE);
+        driver.findElement(XpathStorage.CATALOG).click();
+
+        OnlinerCatalogHelper catalogHelper = new OnlinerCatalogHelper(driver);
+        catalogHelper.chooseItemFromCatalog(indexNumber);
+
+        Assertions.assertThat(driver.findElement(XpathStorage.CATALOG_LIST).isDisplayed()).isTrue();
+        Assertions.assertThat(catalogHelper.getItemsFromComputersParagrafh().containsAll(listOfParagrafhs)).isTrue();
+
+        driver.close();
+    }
+
+    @Test
+    public void checkElementsInAccessories() {
+        int indexNumber = 2;
+
+        System.setProperty("webdriver.chrome.driver", "C:\\Program Files\\drivers\\chromedriver_win32\\chromedriver.exe");
+
+        WebDriver driver = new ChromeDriver();
+        driver.get(ONLINER_START_PAGE);
+        driver.findElement(XpathStorage.CATALOG).click();
+
+        OnlinerCatalogHelper catalogHelper = new OnlinerCatalogHelper(driver);
+        catalogHelper.chooseItemFromCatalog(indexNumber);
+        catalogHelper.findAccessoriesParagrafh(Paragrafhs.COMPONENTS.getName());
+
+        Assertions.assertThat(driver.findElements(XpathStorage.ACCESSORIES_TITLE)).allMatch(WebElement::isDisplayed);
+        Assertions.assertThat(driver.findElements(XpathStorage.ACCESSORIES_TEXT)).allMatch(WebElement::isDisplayed);
+        Assertions.assertThat(driver.findElements(XpathStorage.ACCESSORIES_TEXT_2)).allMatch(WebElement::isDisplayed);
+
+        driver.close();
     }
 }
