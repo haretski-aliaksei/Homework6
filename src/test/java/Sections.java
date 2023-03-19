@@ -1,4 +1,4 @@
-public enum Section {
+public enum Sections {
     ELECTRONICS("Электроника"),
     COMPUTERS_AND_NETWORKS("Компьютеры и сети"),
     APPLIANCES("Бытовая техника"),
@@ -10,13 +10,13 @@ public enum Section {
     WORK_AND_OFFICE("Работа и офис"),
     FOOD("Еда");
 
-    private String nameSection;
+    private String name;
 
-    Section(String nameSection) {
-        this.nameSection = nameSection;
+    Sections(String name) {
+        this.name = name;
     }
 
-    public String getNameSection() {
-        return nameSection;
+    public String getName() {
+        return name;
     }
 }
